@@ -2,6 +2,14 @@ require 'src/imports'
 
 function love.load()
 
+    -- Setup the resolution using the push library
+    Push:setupScreen(GAME_WIDTH, GAME_HEIGHT, WINDOW_WIDTH, WINDOW_HEIGHT,
+    {
+        fullscreen = true,
+        vsync = true,
+        resizable = true
+    })
+
     -- Sets filtering mode to nearest neighbour for crisp sprites
     love.graphics.setDefaultFilter('nearest', 'nearest')
 
@@ -10,6 +18,11 @@ function love.load()
 
     -- Flag to check if game is paused
     paused = false
+end
+
+-- Resizes the game window using the push library
+function love.resize(width, height)
+    Push:resize(width, height)
 end
 
 function love.keypressed(key)
@@ -37,7 +50,13 @@ end
 
 function love.draw()
 
+    -- Starts rendering using the Game dimensions
+    Push:start()
+
     -- Sets font to the title font and prints the title onto the screen
     love.graphics.setFont(Fonts['title'])
-    love.graphics.printf("POKEMON", 0, WINDOW_HEIGHT/2, WINDOW_WIDTH, 'center')
+    love.graphics.printf("POKEMON", 0, GAME_HEIGHT/2 - 32, GAME_WIDTH, 'center')
+
+    -- Stops using the push library for rendering
+    Push:finish()
 end
