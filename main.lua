@@ -1,6 +1,10 @@
 require 'src/imports'
 
 function love.load()
+    math.randomseed(os.time())
+
+    -- Sets filtering mode to nearest neighbour for crisp sprites
+    love.graphics.setDefaultFilter('nearest', 'nearest')
 
     -- Setup the resolution using the push library
     Push:setupScreen(GAME_WIDTH, GAME_HEIGHT, WINDOW_WIDTH, WINDOW_HEIGHT,
@@ -10,14 +14,14 @@ function love.load()
         resizable = true
     })
 
-    -- Sets filtering mode to nearest neighbour for crisp sprites
-    love.graphics.setDefaultFilter('nearest', 'nearest')
+    -- Flag to check if game is paused
+    paused = false
+
+    Stack = StateStack()
+    Stack:push(TitleState())
 
     -- Table to handle keyboard inputs outside of 'main.lua'
     love.keyboard.keyspressed = {}
-
-    -- Flag to check if game is paused
-    paused = false
 end
 
 -- Resizes the game window using the push library
@@ -45,7 +49,12 @@ end
 function love.update(dt)
 
     -- Updates the game state only if it isn't paused
-    if not paused then love.keyboard.keyspressed = {} end
+    if not paused then
+        Timer.update(dt)
+        Stack:update(dt)
+
+        love.keyboard.keyspressed = {}
+    end
 end
 
 function love.draw()
@@ -53,9 +62,7 @@ function love.draw()
     -- Starts rendering using the Game dimensions
     Push:start()
 
-    -- Sets font to the title font and prints the title onto the screen
-    love.graphics.setFont(Fonts['title'])
-    love.graphics.printf("POKEMON", 0, GAME_HEIGHT/2 - 32, GAME_WIDTH, 'center')
+    Stack:render()
 
     -- Stops using the push library for rendering
     Push:finish()
