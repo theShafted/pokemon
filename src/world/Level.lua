@@ -8,6 +8,23 @@ function Level:init()
     self.grassLayer = TileMap(self.mapWidth, self.mapHeight)
 
     self:createMaps()
+
+    self.player = Player {
+        animations = ENTITY_DATA['player'].animations,
+        mapX = 1,
+        mapY = 2,
+        width = 32,
+        height = 32,
+        offsetX = 7,
+        offsetY = 8,
+        scaleX = 0.5,
+        scaleY = 0.5,
+        stateMachine = StateMachine {
+            ['walk'] = function() return PlayerWalkState(self.player, self) end,
+            ['idle'] = function() return PlayerIdleState(self.player) end
+        }
+    }
+    self.player:changeState('idle')
 end
 
 function Level:createMaps()
@@ -30,7 +47,12 @@ function Level:createMaps()
     end
 end
 
+function Level:update(dt)
+    self.player:update(dt)
+end
+
 function Level:render()
     self.groundLayer:render()
     self.grassLayer:render()
+    self.player:render()
 end

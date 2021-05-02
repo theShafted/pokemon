@@ -1,15 +1,18 @@
-require 'src/imports'
-
 function love.load()
+
+    -- Randomseed generator
     math.randomseed(os.time())
 
     -- Sets filtering mode to nearest neighbour for crisp sprites
     love.graphics.setDefaultFilter('nearest', 'nearest')
 
+    -- Imports all files and classes in the project
+    require 'src/imports'
+
     -- Setup the resolution using the push library
     Push:setupScreen(GAME_WIDTH, GAME_HEIGHT, WINDOW_WIDTH, WINDOW_HEIGHT,
     {
-        fullscreen = true,
+        fullscreen = false,
         vsync = true,
         resizable = true
     })
@@ -63,7 +66,6 @@ function love.draw()
     Push:start()
 
     Stack:render()
-
     -- Stops using the push library for rendering
     Push:finish()
 end

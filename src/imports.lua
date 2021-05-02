@@ -9,6 +9,12 @@ require 'src/constants'
 require 'src/utility'
 require 'src/pokemon_data'
 require 'src/StateStack'
+require 'src/StateMachine'
+require 'src/Animation'
+
+require 'src/entity/entity_data'
+require 'src/entity/Entity'
+require 'src/entity/Player'
 
 require 'src/world/Tile'
 require 'src/world/TileMap'
@@ -19,6 +25,12 @@ require 'src/states/game/BaseState'
 require 'src/states/game/FadeState'
 require 'src/states/game/TitleState'
 require 'src/states/game/PlayState'
+
+require 'src/states/entity/EntityBaseState'
+require 'src/states/entity/EntityIdleState'
+require 'src/states/entity/EntityWalkState'
+require 'src/states/entity/PlayerIdleState'
+require 'src/states/entity/PlayerWalkState'
 
 -- Imported fonts
 Fonts =
@@ -54,5 +66,5 @@ Textures = {
 
 Frames = {
     ['tiles'] = generateQuads(Textures['tiles'], TILE_SIZE, TILE_SIZE),
-    ['player'] = generateQuads(Textures['player'], TILE_SIZE, TILE_SIZE)
+    ['player'] = generateQuads(Textures['player'], 64, 64)
 }
