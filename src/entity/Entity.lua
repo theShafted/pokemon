@@ -18,8 +18,10 @@ function Entity:init(parameters)
     self.animations = self:initAnimation(parameters.animations)
     self.currentAnimation = nil
 
-    self.x = (self.mapX - 1) * TILE_SIZE * self.scaleX
-    self.y = (self.mapY - 1) * (TILE_SIZE - (self.height - self.offsetY)) * self.scaleY
+    self.x = ((self.mapX - 1) * TILE_SIZE) * self.scaleX - self.offsetX
+    self.y = ((self.mapY - 1) * TILE_SIZE) * self.scaleY - self.offsetY
+
+    self.speed = PLAYER_WALK_SPEED
 
     self.stateMachine = parameters.stateMachine
 end

@@ -7,6 +7,7 @@ end
 
 function EntityWalkState:enter()
     local X, Y = self.entity.mapX, self.entity.mapY
+    local offsetX, offsetY = self.entity.offsetX, self.entity.offsetY
 
     self.entity:changeAnimation('walk-' .. tostring(self.entity.direction))
 
@@ -20,12 +21,12 @@ function EntityWalkState:enter()
         self.entity:changeAnimation('idle-' .. tostring(self.entity.direction))
         return
     end
- 
+
     self.entity.mapX, self.entity.mapY = X, Y
 
-    Timer.tween(0.35, {
-        [self.entity] = {x = (X - 1) * TILE_SIZE/2,
-                         y = ((Y - 1) * TILE_SIZE - (self.entity.height - self.entity.offsetY))/2}
+    Timer.tween(1/self.entity.speed, {
+        [self.entity] = {x = ((X - 1) * TILE_SIZE)/2 - offsetX,
+                         y = ((Y - 1) * TILE_SIZE)/2 - offsetY}
     }):finish(function()
         if love.keyboard.isDown('left') then
             self.entity.direction = 'left'

@@ -29,3 +29,6 @@ TILES = {
     ['grass'] = 3,
 
 }
+
+PLAYER_WALK_SPEED = 2.5
+PLAYER_RUN_SPEED = 6.5

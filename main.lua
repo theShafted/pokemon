@@ -12,7 +12,7 @@ function love.load()
     -- Setup the resolution using the push library
     Push:setupScreen(GAME_WIDTH, GAME_HEIGHT, WINDOW_WIDTH, WINDOW_HEIGHT,
     {
-        fullscreen = false,
+        fullscreen = true,
         vsync = true,
         resizable = true
     })

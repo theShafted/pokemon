@@ -11,7 +11,6 @@ function EntityBaseState:render()
     local sprite = self.entity.currentAnimation
 
     love.graphics.draw(Textures[sprite.texture], Frames[sprite.texture][sprite:getCurrentFrame()],
-        math.floor(self.entity.x - self.entity.offsetX),
-        math.floor(self.entity.y - self.entity.offsetY),
+        math.floor(self.entity.x), math.floor(self.entity.y),
         0, self.entity.scaleX, self.entity.scaleY)
 end

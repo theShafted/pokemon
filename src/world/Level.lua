@@ -11,12 +11,12 @@ function Level:init()
 
     self.player = Player {
         animations = ENTITY_DATA['player'].animations,
-        mapX = 1,
-        mapY = 2,
+        mapX = 10,
+        mapY = 10,
         width = 32,
         height = 32,
         offsetX = 7,
-        offsetY = 8,
+        offsetY = 19,
         scaleX = 0.5,
         scaleY = 0.5,
         stateMachine = StateMachine {
@@ -54,5 +54,21 @@ end
 function Level:render()
     self.groundLayer:render()
     self.grassLayer:render()
+    
+    love.graphics.stencil(function()
+        local tile = self.grassLayer.tiles[self.player.mapY][self.player.mapX]
+
+        if tile.id == TILES['grass'] and tile:checkCollisions(self.player) then
+            local x, y = self.player.x, self.player.y
+            
+            love.graphics.rectangle('fill', x, y + self.player.height - TILE_SIZE/4, 
+                self.player.width, self.player.height/2)
+        end
+    end, 'replace', 1)
+
+    love.graphics.setStencilTest('less', 1)
+
     self.player:render()
+
+    love.graphics.setStencilTest()
 end
