@@ -60,9 +60,9 @@ function Level:render()
 
         if tile.id == TILES['grass'] and tile:checkCollisions(self.player) then
             local x, y = self.player.x, self.player.y
+            local width, height = self.player.width, self.player.height
             
-            love.graphics.rectangle('fill', x, y + self.player.height - TILE_SIZE/4, 
-                self.player.width, self.player.height/2)
+            love.graphics.rectangle('fill', x, y + height - TILE_SIZE/4, width, height/2)
         end
     end, 'replace', 1)
 
