@@ -3,7 +3,7 @@ Player = Class{__includes = Entity}
 function Player:init(parameters)
     Entity.init(self, parameters)
 
-    self.party = {POKEMON_DATA['rockitten']}
+    self.party = {Pokemon(POKEMON_DATA['rockitten'], 5)}
 end
 
 function Player:update(dt)

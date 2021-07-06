@@ -99,7 +99,7 @@ POKEMON_DATA =
             defenseIV = 3,
             speedIV = 3,
 
-            evolveLv = 2,
+            evolveLv = 6,
             evolveID = 'rockat'
         },
 

@@ -2,8 +2,8 @@ Pokemon = Class()
 
 function Pokemon:init(parameters, level)
     self.name = parameters.name
-    self.battleFrontSprite = parameters.battleFrontSprite
-    self.battleBackSprite = parameters.battleBackSprite
+    self.frontSprite = parameters.frontSprite
+    self.backSprite = parameters.backSprite
     
     self.baseHP = parameters.baseHP
     self.baseAttack = parameters.baseAttack
@@ -30,6 +30,10 @@ function Pokemon:init(parameters, level)
     self:calculateStats()
 
     self.currentHP = self.HP
+end
+
+function Pokemon:getRandom(level)
+    return Pokemon(POKEMON_DATA[POKEMON_IDS[math.random(#POKEMON_IDS)]], level or math.random(4))
 end
 
 function Pokemon:calculateStats()

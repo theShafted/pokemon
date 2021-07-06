@@ -7,10 +7,18 @@ Easing = require 'libs/easing'
 -- Imported document classes
 require 'src/constants'
 require 'src/utility'
-require 'src/pokemon_data'
 require 'src/StateStack'
 require 'src/StateMachine'
 require 'src/Animation'
+
+require 'src/pokemon_data'
+require 'src/Pokemon'
+
+require 'src/ui/Panel'
+require 'src/ui/Bar'
+
+require 'src/battle/BattleSprite'
+require 'src/battle/Opponent'
 
 require 'src/entity/entity_data'
 require 'src/entity/Entity'
@@ -25,6 +33,7 @@ require 'src/states/game/BaseState'
 require 'src/states/game/FadeState'
 require 'src/states/game/TitleState'
 require 'src/states/game/PlayState'
+require 'src/states/game/BattleState'
 
 require 'src/states/entity/EntityBaseState'
 require 'src/states/entity/EntityIdleState'

@@ -3,7 +3,7 @@ TitleState = Class{__includes = BaseState}
 function TitleState:init()
 
     -- Initialize the background colors of the title screen
-    self.colors = COLORS.black
+    self.colors = COLORS['black']
 
     -- Initialize properties for the game title
     self.title = {
@@ -103,7 +103,7 @@ function TitleState:update(dt)
 
     -- Start the routine for pushing the Play State when the 'enter' key is pressed
     if love.keyboard.keypressed('enter') or love.keyboard.keypressed('return') then
-        Stack:push(FadeState(COLORS.white, 0.5, 'in',
+        Stack:push(FadeState(COLORS['white'], 0.5, 'in',
         function()
 
             -- Remove the Title Screen State from the stack
@@ -113,7 +113,7 @@ function TitleState:update(dt)
             Stack:push(PlayState())
 
             -- Add a fade out animation via a Fade State onto the stack
-            Stack:push(FadeState(COLORS.white, 0.5, 'out', function() end))
+            Stack:push(FadeState(COLORS['white'], 0.5, 'out', function() end))
         end))
     end
 end

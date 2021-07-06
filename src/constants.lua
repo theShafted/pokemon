@@ -16,7 +16,10 @@ WINDOW_HEIGHT = 1080
 COLORS =
 {
     ['black'] = {r = 0, g = 0, b = 0},
-    ['white'] = {r = 1, g = 1, b = 1}
+    ['white'] = {r = 1, g = 1, b = 1},
+    
+    ['health'] = {r = 32/255, g = 189/255, b = 32/255},
+    ['exp'] = {r = 32/255, g = 32/255, b = 189/255}
 }
 
 POKEMON_SPRITE_SIZE = 64

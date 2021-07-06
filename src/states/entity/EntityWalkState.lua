@@ -5,7 +5,9 @@ function EntityWalkState:init(entity, level)
     self.level = level
 end
 
-function EntityWalkState:enter()
+function EntityWalkState:enter() self:move() end
+
+function EntityWalkState:move()
     local X, Y = self.entity.mapX, self.entity.mapY
     local offsetX, offsetY = self.entity.offsetX, self.entity.offsetY
 
