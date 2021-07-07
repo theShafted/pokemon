@@ -20,9 +20,6 @@ function Bar:update(dt) end
 function Bar:render()
     local remaining = (self.value/self.max) * self.width
     
-    for _, k in pairs(self.color) do
-        print(_, k)
-    end
     love.graphics.setColor(self.color.r, self.color.g, self.color.b, 1)
 
     if self.value > 0 then

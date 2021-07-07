@@ -2,7 +2,7 @@
 FONTS = 
 {
     ['title'] = 24,
-    ['small'] = 6
+    ['small'] = 6,
 }
 
 -- Constants for game and window screen dimensions to be used by push 
@@ -19,7 +19,9 @@ COLORS =
     ['white'] = {r = 1, g = 1, b = 1},
     
     ['health'] = {r = 32/255, g = 189/255, b = 32/255},
-    ['exp'] = {r = 32/255, g = 32/255, b = 189/255}
+    ['exp'] = {r = 32/255, g = 32/255, b = 189/255},
+
+    ['panel'] = {r = 25/255, g = 25/255, b = 25/255}
 }
 
 POKEMON_SPRITE_SIZE = 64

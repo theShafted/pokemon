@@ -15,3 +15,10 @@ function generateQuads(sheet, width, height)
 
     return spritesheet
 end
+
+function invert(t)
+    local s = {}
+    for k, v in pairs(t) do s[v]=k end
+    
+    return s
+ end

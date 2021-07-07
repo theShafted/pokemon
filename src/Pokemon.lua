@@ -33,7 +33,7 @@ function Pokemon:init(parameters, level)
 end
 
 function Pokemon:getRandom(level)
-    return Pokemon(POKEMON_DATA[POKEMON_IDS[math.random(#POKEMON_IDS)]], level or math.random(4))
+    return Pokemon(POKEMON_DATA[POKEMON_IDS[math.random(#POKEMON_IDS)]], level or math.random(2, 4))
 end
 
 function Pokemon:calculateStats()

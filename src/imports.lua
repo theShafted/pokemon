@@ -16,6 +16,9 @@ require 'src/Pokemon'
 
 require 'src/ui/Panel'
 require 'src/ui/Bar'
+require 'src/ui/TextBox'
+require 'src/ui/Selections'
+require 'src/ui/Menu'
 
 require 'src/battle/BattleSprite'
 require 'src/battle/Opponent'
@@ -34,6 +37,8 @@ require 'src/states/game/FadeState'
 require 'src/states/game/TitleState'
 require 'src/states/game/PlayState'
 require 'src/states/game/BattleState'
+require 'src/states/game/MessageState'
+require 'src/states/game/BattleMenuState'
 
 require 'src/states/entity/EntityBaseState'
 require 'src/states/entity/EntityIdleState'
@@ -70,7 +75,9 @@ Textures = {
     ['criniotherme-front'] = love.graphics.newImage('graphics/Criniotherme.png'),
     ['criniotherme-back'] = love.graphics.newImage('graphics/Criniotherme_back.png'),
 
-    ['player'] = love.graphics.newImage('graphics/player.png');
+    ['player'] = love.graphics.newImage('graphics/player.png'),
+    
+    ['cursor'] = love.graphics.newImage('graphics/cursor.png')
 }
 
 Frames = {

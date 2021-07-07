@@ -14,7 +14,7 @@ function BattleState:init(player, opponent)
     self.bottomPanel = Panel(0, GAME_HEIGHT - 64, GAME_WIDTH, 64)
     self.playerHealthBar = Bar {
         x = GAME_WIDTH - 170,
-        y = GAME_HEIGHT - 90,
+        y = GAME_HEIGHT - 95,
         width = 152,
         height = 6,
         color = COLORS['health'],
@@ -96,9 +96,31 @@ function BattleState:slideIn()
     self.started = true
 
     Timer.tween(1, {
-        [self.playerSprite] = {x = 32},
         [self.opponentSprite] = {x = GAME_WIDTH - 100},
         [self] = {playerCircleX = 66, opponentCircleX = GAME_WIDTH - 70}
     }):ease(Easing.inExpo)
-    :finish(function() self.renderHealthBars = true end)
+    :finish(function()
+        self:start()
+        self.renderHealthBars = true
+    end)
+end
+
+function BattleState:start()
+    local message = ''
+    if self.opponent.wild then
+        message = self.opponent.wild and 'A wild ' .. self.opponentPokemon.name .. ' appeared!'
+    else
+        message = 'You are challenged by trainer ' .. self.opponent.name .. '!'
+    end
+
+    Stack:push(MessageState(message, function()
+        Stack:push(MessageState('Go ' .. self.playerPokemon.name .. '!', function()
+            Timer.tween(0.5, {
+                [self.playerSprite] = {x = 32}
+            })
+            Stack:push(MessageState('What will ' .. self.playerPokemon.name .. ' do?', function()
+                Stack:push(BattleMenuState(self))
+            end, false))
+        end))
+    end))
 end

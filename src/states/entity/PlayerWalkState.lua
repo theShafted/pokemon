@@ -20,7 +20,8 @@ function PlayerWalkState:checkEncounter()
         function()
             Stack:push(BattleState(self.entity, Opponent{
                 party = {Pokemon.getRandom()},
-                items = {}
+                items = {},
+                wild = true
             }))
             Stack:push(FadeState(COLORS['black'], 1, 'out', function() end))
         end))
