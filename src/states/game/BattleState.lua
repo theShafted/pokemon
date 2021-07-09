@@ -118,6 +118,7 @@ function BattleState:start()
             Timer.tween(0.5, {
                 [self.playerSprite] = {x = 32}
             })
+
             Stack:push(MessageState('What will ' .. self.playerPokemon.name .. ' do?', function()
                 Stack:push(BattleMenuState(self))
             end, false))

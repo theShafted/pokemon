@@ -17,7 +17,7 @@ function Selections:update(dt)
         self.current = self.current == 1 and #self.items or self.current - 1
     elseif love.keyboard.keypressed('right') then
         self.current = self.current == #self.items and 1 or self.current + 1
-    elseif love.keyboard.keypressed('enter') or love.keyboard.keypressed('return') then
+    elseif love.keyboard.keypressed('space') then
         self.items[self.current]:selected()
     end
 end

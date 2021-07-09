@@ -15,6 +15,9 @@ function FadeState:init(color, time, type, callback)
     -- Time duration for the fading animation
     self.time = time
 
+    -- Set callback to an empty function if not passed by parameter
+    self.callback = callback or function() end
+
     -- Tween the opacity of the fade in the specified time
     Timer.tween(self.time, {
 
@@ -25,7 +28,7 @@ function FadeState:init(color, time, type, callback)
     -- call the callback function and pop the Fade State after the tween finishes
     :finish(function()
         Stack:pop()
-        callback()
+        self.callback()
     end)
 end
 

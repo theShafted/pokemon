@@ -21,7 +21,6 @@ end
 
 -- Pop method to remove the newest state of the stack
 function StateStack:pop()
-
     --[[
         Call the exit method of the state to be removed first
         Removes the last state from the states table

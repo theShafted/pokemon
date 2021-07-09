@@ -27,9 +27,9 @@ function Pokemon:init(parameters, level)
     self.defense = parameters.baseDefense
     self.speed = parameters.baseSpeed
 
-    self:calculateStats()
-
     self.currentHP = self.HP
+
+    self:calculateStats()
 end
 
 function Pokemon:getRandom(level)
@@ -48,6 +48,7 @@ function Pokemon:lvlUpStats()
     for i = 1, 3 do
         if math.random(6) <= self.HPIV then
             self.HP = self.HP + 1
+            self.currentHP = self.currentHP + 1
             HP = HP + 1
         end
 
@@ -74,40 +75,15 @@ function Pokemon:levelUp()
     self.level = self.level + 1
     self.lvlUpExp = self.level * self.level * 5 * 0.75
 
-    if self.level >= self.evolveLv then
-        return self:evolve(POKEMON_DATA[self.evolveID])
-    end
-
     return self:lvlUpStats()
 end
 
-function Pokemon:evolve(evolution)
-    self:init(evolution, self.level)
+function Pokemon:evolve()
+    local exp, HP = self.exp, self.currentHP - self.HP
 
-    -- prototype
-    --[[self.name = evolution.name
-    self.battleFrontSprite = evolution.battleFrontSprite
-    self.battleBackSprite = evolution.battleBackSprite
-    
-    self.baseHP = evolution.baseHP
-    self.baseAttack = evolution.baseAttack
-    self.baseDefense = evolution.baseDefense
-    self.baseSpeed = evolution.baseSpeed
+    Stack:push(EvolveState(self))
 
-    self.HPIV = evolution.HPIV
-    self.attackIV = evolution.attackIV
-    self.defenseIV = evolution.defenseIV
-    self.speedIV = evolution.speedIV
-
-    self.evolveLv = evolution.evolveLv
-    self.evolveID = evolution.evolveID
-
-    self.HP = evolution.baseHP
-    self.attack = evolution.baseAttack
-    self.defense = evolution.baseDefense
-    self.speed = evolution.baseSpeed
-
-    self:calculateStats()
-
-    self.currentHP = self.HP]]
+    self:init(POKEMON_DATA[self.evolveID], self.level)
+    self.exp = exp
+    self.currentHP = HP + self.HP
 end

@@ -18,7 +18,7 @@ function Bar:setValue(value) self.value = value end
 function Bar:update(dt) end
 
 function Bar:render()
-    local remaining = (self.value/self.max) * self.width
+    local remaining = math.floor(self.value / self.max * self.width)
     
     love.graphics.setColor(self.color.r, self.color.g, self.color.b, 1)
 

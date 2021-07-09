@@ -3,7 +3,7 @@ MessageState = Class{__includes = BaseState}
 function MessageState:init(message, callback, input)
     self.textbox = TextBox(0, GAME_HEIGHT - 50, GAME_WIDTH, 50, message)
     self.callback = callback or function() end
-    self.input = input == nil and true or false
+    self.input = input == nil and true or input
 end
 
 function MessageState:update(dt)
@@ -14,7 +14,7 @@ function MessageState:update(dt)
             Stack:pop()
             self.callback()
         end
-    else Timer.after(0.5, function() self.callback() end) end
+    else self.callback() end
 end
 
 function MessageState:render() self.textbox:render() end

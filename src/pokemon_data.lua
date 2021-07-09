@@ -90,13 +90,13 @@ POKEMON_DATA =
             backSprite = 'rockitten-back',
             
             baseHP = 13,
-            baseAttack = 5,
+            baseAttack = 15,
             baseDefense = 12,
             baseSpeed = 10,
             
-            HPIV = 3,
-            attackIV = 1,
-            defenseIV = 3,
+            HPIV = 2,
+            attackIV = 4,
+            defenseIV = 2,
             speedIV = 3,
 
             evolveLv = 6,
@@ -110,7 +110,7 @@ POKEMON_DATA =
             backSprite = 'rockat-back',
             
             baseHP = 15,
-            baseAttack = 12,
+            baseAttack = 20,
             baseDefense = 12,
             baseSpeed = 11,
             

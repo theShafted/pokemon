@@ -11,11 +11,11 @@ function BattleMenuState:init(battleState)
         items = {
             {
                 text = "ATTACK",
-                selected = function() end
-            },
-            {
-                text = "RUN",
-                selected = function() end
+                selected = function()
+                    Stack:pop()
+                    Stack:pop()
+                    Stack:push(TurnState(self.battleState))
+                end
             },
             {
                 text = "POKEMON",
@@ -24,6 +24,29 @@ function BattleMenuState:init(battleState)
             {
                 text = "BAG",
                 selected = function() end
+            },
+            {
+                text = "RUN",
+                selected = function()
+                    if math.random(5) == 1 then
+                        Stack:push(MessageState('Cannot run away!', function() end, false))
+                        Timer.after(0.5, function() Stack:pop() end)
+                    else
+                        Stack:pop()
+                        Stack:pop()
+
+                        Stack:push(MessageState('Fled successfully!', function() end, false))
+
+                        Timer.after(0.5, function()
+                            Stack:push(FadeState(COLORS['black'], 1, 'in', function()
+                                Stack:pop()
+                                Stack:pop()
+
+                                Stack:push(FadeState(COLORS['black'], 1, 'out', function() end))
+                            end))
+                        end)
+                    end
+                end
             }
         }
     }
