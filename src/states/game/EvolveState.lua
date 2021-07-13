@@ -2,7 +2,10 @@ EvolveState = Class{__includes = BaseState}
 
 function EvolveState:init(pokemon)
     self.pokemon = pokemon
-    self.evolution = POKEMON_DATA[pokemon.evolveID]
+    self.evolution = Pokemon(POKEMON_DATA[pokemon.evolveID], pokemon.level, pokemon.learned)
+
+    self.evolution.exp = self.pokemon.exp
+    self.evolution.currentHP = self.pokemon.currentHP + self.evolution.HP - self.pokemon.HP
     
     self.sprite = BattleSprite(pokemon.frontSprite, GAME_WIDTH/2 - 32, GAME_HEIGHT/2 - 32)
     self.evolutionSprite = BattleSprite(self.evolution.frontSprite, GAME_WIDTH/2 - 32, GAME_HEIGHT/2 - 32)
@@ -36,10 +39,27 @@ function EvolveState:enter()
 
                     local message = self.pokemon.name .. ' evolved into ' .. self.evolution.name .. '!'
                     Stack:push(MessageState(message, function()
-                        Stack:push(FadeState(COLORS['white'], 0.5, 'in', function()
-                            Stack:pop()
-                            Stack:push(FadeState(COLORS['white'], 0.5, 'out'))
-                        end))
+                        local learning = false
+
+                        for name, level in pairs(self.evolution.moves) do
+                            local learned = false
+                            
+                            for _, move in pairs(self.pokemon.learned) do
+                                if move.name == name then learned = true end
+                                if self.pokemon.moves[move.name] > level then learned = true end
+                            end
+
+                            if not learned and self.pokemon.level >= level then
+                                learning = name
+                            end
+                        end
+
+                        if not learning then self:fadeOut()
+                        else
+                            Stack:push(LearnState(self.pokemon, learning, function()
+                                self:fadeOut()
+                            end))
+                        end
                     end))
                 end)
             end)
@@ -60,4 +80,12 @@ function EvolveState:render()
     end
 
     self.evolutionSprite:render()
+end
+
+function EvolveState:fadeOut()
+    Stack:push(FadeState(COLORS['white'], 0.5, 'in', function()
+        Stack:pop()
+        self.pokemon:evolve()
+        Stack:push(FadeState(COLORS['white'], 0.5, 'out'))
+    end))
 end

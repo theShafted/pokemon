@@ -37,34 +37,42 @@ function TurnState:init(battleState)
 end
 
 function TurnState:enter(parameters)
-    self:attack(self.first, self.second, function()
-        Stack:pop()
-        
-        if self:checkDeath() then
+    local moves = self.battleState.playerPokemon:getMoves()
+    Stack:push(MessageState('Select a move', function()
+        Stack:push(BattleMenuState(self.battleState, moves, function()
             Stack:pop()
-            return
-        end
+            Stack:pop()
 
-        self:attack(self.second, self.first, function()
-            Stack:pop()
-            
-            if self:checkDeath() then
+            self:attack(self.first, self.second, function()
                 Stack:pop()
-                return
-            end
-
-            Stack:pop()
-
-            local message = 'What will ' .. self.battleState.playerPokemon.name .. ' do?'
-            Stack:push(MessageState(message, function()
-                Stack:push(BattleMenuState(self.battleState))
-            end, false))
-        end)
-    end)
+                
+                if self:checkDeath() then
+                    Stack:pop()
+                    return
+                end
+        
+                self:attack(self.second, self.first, function()
+                    Stack:pop()
+                    
+                    if self:checkDeath() then
+                        Stack:pop()
+                        return
+                    end
+        
+                    Stack:pop()
+        
+                    local message = 'What will ' .. self.battleState.playerPokemon.name .. ' do?'
+                    Stack:push(MessageState(message, function()
+                        Stack:push(BattleMenuState(self.battleState))
+                    end, false))
+                end)
+            end)
+        end))
+    end, false))
 end
 
 function TurnState:attack(attacker, defender, callback)
-    local message = attacker.pokemon.name .. ' attacks ' .. defender.pokemon.name .. '!'
+    local message = attacker.pokemon.name .. ' used ' .. attacker.pokemon.move.name .. '!'
     Stack:push(MessageState(message, function() end, false))
 
     Timer.after(0.5, function()
@@ -101,9 +109,9 @@ function TurnState:attack(attacker, defender, callback)
                 end)
                 :limit(6)
 
-                local damage = math.max(1, attacker.pokemon.attack - defender.pokemon.defense)
+                local damage = self:damage(attacker.pokemon, defender.pokemon)
                 Timer.tween(0.5, {
-                    [defender.bar] = {value = defender.pokemon.currentHP - damage}
+                    [defender.bar] = {value = math.floor(defender.pokemon.currentHP - damage)}
                 })
                 :finish(function()
                     defender.pokemon.currentHP = math.max(0, defender.pokemon.currentHP - damage)
@@ -112,7 +120,11 @@ function TurnState:attack(attacker, defender, callback)
                 end)
             end)
         end)
-    end)
+    end)            
+end
+
+function TurnState:damage(attacker, defender)
+    return math.max(1, math.floor(attacker.attack / defender.defense * attacker.move.power))
 end
 
 function TurnState:checkDeath()
@@ -149,7 +161,7 @@ end
 
 function TurnState:victory()
     local pokemon, levelsGained = self.battleState.opponentPokemon, 0
-    local exp = pokemon.level * (pokemon.HPIV + pokemon.attackIV + pokemon.defenseIV + pokemon.speedIV)
+    local exp = 10*pokemon.level * (pokemon.HPIV + pokemon.attackIV + pokemon.defenseIV + pokemon.speedIV)
     
     Timer.tween(1.5, {
         [self.battleState.opponentSprite] = {opacity = 0}
@@ -167,23 +179,52 @@ function TurnState:victory()
             :finish(function()
                 Stack:pop()
 
-                if exp >= pokemon.lvlUpExp then    
-                    while(exp >= pokemon.lvlUpExp) do
+                if exp >= pokemon.lvlUpExp then
+                    while(exp > pokemon.lvlUpExp) do
                         exp = exp - pokemon.lvlUpExp
                         pokemon:levelUp()
                         levelsGained = levelsGained + 1
                     end
-
+            
                     Stack:push(MessageState(pokemon.name .. ' grew to ' .. pokemon.level, function()
-                        self.battleState.playerEXPBar.value = 0
-                        Timer.tween(1, {[self.battleState.playerEXPBar] = {value = exp}})
+                        local learning = false
 
-                        pokemon.exp = exp
+                        for name, level in pairs(pokemon.moves) do
+                            local learned = false
+                            for _, move in pairs(pokemon.learned) do
+                                if move.name == name then learned = true end
+                            end            
 
-                        if levelsGained > 0 and pokemon.level >= pokemon.evolveLv then
-                            self:fadeOut(pokemon)
-                        else
-                            self:fadeOut()
+                            if not learned and level > pokemon.level - levelsGained then
+                                learning = true
+                                Stack:push(LearnState(pokemon, name, function()
+                                    self.battleState.playerEXPBar.value = 0
+                                    Timer.tween(1, {[self.battleState.playerEXPBar] = {value = exp}})
+                                    :finish(function()
+                                        pokemon.exp = exp
+            
+                                        if levelsGained > 0 and pokemon.level >= pokemon.evolveLv then
+                                            self:fadeOut(pokemon)
+                                        else
+                                            self:fadeOut()
+                                        end
+                                    end)
+                                end))
+                            end
+                        end
+                        
+                        if not learning then
+                            self.battleState.playerEXPBar.value = 0
+                            Timer.tween(1, {[self.battleState.playerEXPBar] = {value = exp}})
+                            :finish(function()
+                                pokemon.exp = exp
+
+                                if levelsGained > 0 and pokemon.level >= pokemon.evolveLv then
+                                    self:fadeOut(pokemon)
+                                else
+                                    self:fadeOut()
+                                end
+                            end)
                         end
                     end))
                 else
@@ -199,7 +240,7 @@ function TurnState:fadeOut(evolution)
     Stack:push(FadeState(COLORS['black'], 1, 'in', function()
         Stack:pop()
 
-        if evolution ~= nil then evolution:evolve() end
+        if evolution ~= nil then Stack:push(EvolveState(evolution)) end
         Stack:push(FadeState(COLORS['black'], 1, 'out'))
     end))
 end

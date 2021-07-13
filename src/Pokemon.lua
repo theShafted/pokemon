@@ -1,6 +1,6 @@
 Pokemon = Class()
 
-function Pokemon:init(parameters, level)
+function Pokemon:init(parameters, level, learned)
     self.name = parameters.name
     self.frontSprite = parameters.frontSprite
     self.backSprite = parameters.backSprite
@@ -29,7 +29,14 @@ function Pokemon:init(parameters, level)
 
     self.currentHP = self.HP
 
+    self.moves = parameters.moves
+    self.learned = {}
+
     self:calculateStats()
+    self:learn()
+
+    self.learned = learned or self.learned
+    self.move = self.learned[#self.learned]
 end
 
 function Pokemon:getRandom(level)
@@ -79,11 +86,32 @@ function Pokemon:levelUp()
 end
 
 function Pokemon:evolve()
-    local exp, HP = self.exp, self.currentHP - self.HP
+    self:init(POKEMON_DATA[self.evolveID], self.level, self.learned)
+end
 
-    Stack:push(EvolveState(self))
+function Pokemon:getMoves()
+    local moves = {}
+    
+    for _, move in pairs(self.learned) do
+        table.insert(moves, {
+            text = move.name,
+            selected = function()
+                self.move = move
+            end
+        })
+    end
+   
+    return moves
+end
 
-    self:init(POKEMON_DATA[self.evolveID], self.level)
-    self.exp = exp
-    self.currentHP = HP + self.HP
+function Pokemon:learn(move)
+    if move then
+        table.insert(self.learned, move)
+        return
+    end
+        
+    for name, level in pairs(self.moves) do
+        local move = MOVES_DATA[name]
+        if level <= self.level then self:learn(move) end
+    end
 end

@@ -20,6 +20,8 @@ POKEMON_IDS = {'flambear', 'viviteel', 'pipis', 'rockitten', 'rockat', 'crinioth
 
     Level at which the pokemon evolves
     ID of the evolution of the pokemon
+
+    Moves which can be learned by the pokemon and at which level
 ]]
 POKEMON_DATA =
 {
@@ -40,7 +42,12 @@ POKEMON_DATA =
             speedIV = 3,
 
             evolveLv = 101,
-            evolveID = ''
+            evolveID = '',
+
+            moves =
+            {
+                ['scratch'] = 1
+            }
         },
 
         ['viviteel'] =
@@ -60,7 +67,12 @@ POKEMON_DATA =
             speedIV = 5,
 
             evolveLv = 101,
-            evolveID = ''
+            evolveID = '',
+
+            moves =
+            {
+                ['scratch'] = 1
+            }
         },
 
         ['pipis'] =
@@ -80,7 +92,12 @@ POKEMON_DATA =
             speedIV = 5,
 
             evolveLv = 101,
-            evolveID = ''
+            evolveID = '',
+
+            moves =
+            {
+                ['scratch'] = 1
+            }
         },
 
         ['rockitten'] =
@@ -99,8 +116,17 @@ POKEMON_DATA =
             defenseIV = 2,
             speedIV = 3,
 
-            evolveLv = 6,
-            evolveID = 'rockat'
+            evolveLv = 11,
+            evolveID = 'rockat',
+
+            moves =
+            {
+                ['scratch'] = 1,
+                ['tackle'] = 3,
+                ['growl'] = 2,
+                ['leer'] = 2,
+                ['rollout'] = 7
+            }
         },
 
         ['rockat'] =
@@ -120,7 +146,13 @@ POKEMON_DATA =
             speedIV = 3,
 
             evolveLv = 101,
-            evolveID = ''
+            evolveID = '',
+
+            moves =
+            {
+                ['scratch'] = 1,
+                ['rollout'] = 7 
+            }
         },
         
         ['criniotherme'] =
@@ -140,6 +172,11 @@ POKEMON_DATA =
             speedIV = 4,
 
             evolveLv = 101,
-            evolveID = ''
-        },
+            evolveID = '',
+
+            moves =
+            {
+                ['scratch'] = 1
+            }
+        }
 }

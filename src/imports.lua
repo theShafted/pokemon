@@ -20,8 +20,10 @@ require 'src/ui/TextBox'
 require 'src/ui/Selections'
 require 'src/ui/Menu'
 
+require 'src/battle/moves_data'
 require 'src/battle/BattleSprite'
 require 'src/battle/Opponent'
+require 'src/battle/Move'
 
 require 'src/entity/entity_data'
 require 'src/entity/Entity'
@@ -41,6 +43,7 @@ require 'src/states/game/MessageState'
 require 'src/states/game/BattleMenuState'
 require 'src/states/game/TurnState'
 require 'src/states/game/EvolveState'
+require 'src/states/game/LearnState'
 
 require 'src/states/entity/EntityBaseState'
 require 'src/states/entity/EntityIdleState'

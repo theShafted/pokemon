@@ -1,14 +1,12 @@
 BattleMenuState = Class{__includes = BaseState}
 
-function BattleMenuState:init(battleState)
-    self.battleState = battleState
+function BattleMenuState:init(battleState, items, callback)
+    self.battleState = battleState or nil
+    self.callback = callback or function() end
 
     self.menu = Menu {
-        x = 150,
-        y = GAME_HEIGHT - 68,
-        width = GAME_WIDTH - 150,
-        height = 17,
-        items = {
+        callback = self.callback,
+        items = items or {
             {
                 text = "ATTACK",
                 selected = function()

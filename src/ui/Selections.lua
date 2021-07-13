@@ -1,6 +1,7 @@
 Selections = Class()
 
 function Selections:init(parameters)
+    self.callback = parameters.callback
     self.items = parameters.items
     self.x = parameters.x 
     self.y = parameters.y 
@@ -19,6 +20,7 @@ function Selections:update(dt)
         self.current = self.current == #self.items and 1 or self.current + 1
     elseif love.keyboard.keypressed('space') then
         self.items[self.current]:selected()
+        self.callback()
     end
 end
 
