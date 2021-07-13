@@ -199,7 +199,9 @@ function TurnState:victory()
                                 learning = true
                                 Stack:push(LearnState(pokemon, name, function()
                                     self.battleState.playerEXPBar.value = 0
-                                    Timer.tween(1, {[self.battleState.playerEXPBar] = {value = exp}})
+                                    Timer.tween(1, {[self.battleState.playerEXPBar] = {
+                                        value = math.min(exp, pokemon.lvlUpExp)
+                                    }})
                                     :finish(function()
                                         pokemon.exp = exp
             

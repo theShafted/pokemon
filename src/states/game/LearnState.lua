@@ -14,39 +14,51 @@ function LearnState:enter()
             self.callback()
         end))
     else
-        local message = self.pokemon.name .. ' wants to learn ' .. self.move.name
-        Stack:push(message, function()
-            message = 'But, it already knows four moves, should one be deleted?'
-            Stack:push(message, function()
+        Stack:push(MessageState(self.pokemon.name .. ' wants to learn ' .. self.move.name, function()
+            Stack:pop()
+
+            local message = 'But, it already knows four moves, should one be deleted?'
+            Stack:push(MessageState(message, function()
                 Stack:push(BattleMenuState(nil, {
                     {
                         text = 'Yes',
                         selected = function()
                             Stack:pop()
+                            Stack:pop()
 
-                            Stack:push('Which move should be forgotten?', function()
+                            Stack:push(MessageState('Which move should be forgotten?', function()
                                 Stack:push(BattleMenuState(nil, self.pokemon:getMoves(), function()
                                     Stack:pop()
-                                    table.remove(self.pokemon.learned, invert(self.pokemon.move))
 
-                                    Stack:push(MessageState('Forgot', function()
+                                    local index = invert(self.pokemon.learned)[self.pokemon.move]
+                                    local name = self.pokemon.move.name
+                                    Stack:push(MessageState('Forgot ' .. name .. '!', function()
                                         Stack:pop()
+
+                                        table.remove(self.pokemon.learned, index)
                                         self.pokemon:learn(self.move)
-                                        Stack:push('Successfully learned ' .. self.move.name)
+
+                                        message ='Successfully learned ' .. self.move.name .. '!'
+                                        Stack:push(MessageState(message, function()
+                                            self.callback()
+                                        end))
                                     end))
                                 end))
-                            end)
+                            end, false))
                         end
                     },
                     {
                         text = 'NO',
                         selected = function()
                             Stack:pop()
-                            Stack:push(MessageState('Did not learn ' .. self.move.name))
+                            Stack:pop()
+                            Stack:push(MessageState('Did not learn ' .. self.move.name, function()
+                                self.callback()
+                            end))
                         end
                     }
                 }))
-            end)
-        end)
+            end, false))
+        end))
     end
 end
