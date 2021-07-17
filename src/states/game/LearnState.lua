@@ -31,8 +31,10 @@ function LearnState:enter()
                                     Stack:pop()
 
                                     local index = invert(self.pokemon.learned)[self.pokemon.move]
+                                    
                                     local name = self.pokemon.move.name
-                                    Stack:push(MessageState('Forgot ' .. name .. '!', function()
+                                    message = self.pokemon.name .. ' forgot ' .. '!'
+                                    Stack:push(MessageState(message, function()
                                         Stack:pop()
 
                                         table.remove(self.pokemon.learned, index)
@@ -52,9 +54,9 @@ function LearnState:enter()
                         selected = function()
                             Stack:pop()
                             Stack:pop()
-                            Stack:push(MessageState('Did not learn ' .. self.move.name, function()
-                                self.callback()
-                            end))
+
+                            message = self.pokemon.name .. ' did not learn ' .. self.move.name .. '!'
+                            Stack:push(MessageState(message, function() self.callback() end))
                         end
                     }
                 }))

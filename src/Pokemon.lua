@@ -37,10 +37,20 @@ function Pokemon:init(parameters, level, learned)
 
     self.learned = learned or self.learned
     self.move = self.learned[#self.learned]
+
+    self.modifiers = {
+        attack = 0,
+        defense = 0,
+        speed = 0,
+        critical = 625/100
+    }
+
+    self.isCritical = false
 end
 
 function Pokemon:getRandom(level)
-    return Pokemon(POKEMON_DATA[POKEMON_IDS[math.random(#POKEMON_IDS)]], level or math.random(2, 4))
+    local level = level or math.random(2, 4)
+    return Pokemon(POKEMON_DATA[POKEMON_IDS[math.random(#POKEMON_IDS)]], level)
 end
 
 function Pokemon:calculateStats()
@@ -89,15 +99,13 @@ function Pokemon:evolve()
     self:init(POKEMON_DATA[self.evolveID], self.level, self.learned)
 end
 
-function Pokemon:getMoves()
+function Pokemon:getMoves(callback)
     local moves = {}
     
-    for _, move in pairs(self.learned) do
+    for _, move in ipairs(self.learned) do
         table.insert(moves, {
             text = move.name,
-            selected = function()
-                self.move = move
-            end
+            selected = callback or function() self.move = move end
         })
     end
    
@@ -110,8 +118,53 @@ function Pokemon:learn(move)
         return
     end
         
-    for name, level in pairs(self.moves) do
-        local move = MOVES_DATA[name]
-        if level <= self.level then self:learn(move) end
+    for i = 1, 100 do
+        for name, level in pairs(self.moves) do
+            if level == i then
+                local move = MOVES_DATA[name]
+                if level <= self.level then self:learn(move) end
+                
+                break
+            end
+        end
     end
+end
+
+function Pokemon:getExp(pokemon)
+    return pokemon.level * (pokemon.HPIV + pokemon.attackIV + pokemon.defenseIV + pokemon.speedIV)
+end
+
+function Pokemon:getDamage(move, pokemon)
+    move.effect(self, pokemon)
+
+    local modifier = MODIFIERS[self.modifiers.attack]
+    local random = math.random(3)
+
+    if move.type == 'damage' then
+        self.isCritical = math.random() <= self.modifiers.critical and true or false
+
+        if self.isCritical then
+            modifier = self.modifiers.attack > 0 and modifier or MODIFIERS[0]
+            modifier = pokemon.modifiers.defense > 0 and 2 * modifier or 2 * modifier / MODIFIERS[pokemon.modifiers.defense]
+
+            Stack:push(MessageState('It\'s a critical hit!', nil, false))
+        else 
+            modifier = modifier / MODIFIERS[pokemon.modifiers.defense]
+        end
+
+        return math.max(1, math.floor(move.power * modifier * self.attack/pokemon.defense)) + random
+    else
+        return 0
+    end
+end
+
+function Pokemon:resetModifiers()
+    self.modifiers = {
+        attack = 0,
+        defense = 0,
+        speed = 0,
+        critical = 6.25
+    }
+
+    self.isCritical = false
 end

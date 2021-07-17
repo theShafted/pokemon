@@ -71,7 +71,7 @@ POKEMON_DATA =
 
             moves =
             {
-                ['scratch'] = 1
+                ['tackle'] = 1
             }
         },
 
@@ -96,7 +96,7 @@ POKEMON_DATA =
 
             moves =
             {
-                ['scratch'] = 1
+                ['tackle'] = 1
             }
         },
 
@@ -121,10 +121,8 @@ POKEMON_DATA =
 
             moves =
             {
-                ['scratch'] = 1,
-                ['tackle'] = 3,
-                ['growl'] = 2,
-                ['leer'] = 2
+                ['tackle'] = 1,
+                ['growl'] = 2
             }
         },
 
@@ -150,7 +148,9 @@ POKEMON_DATA =
             moves =
             {
                 ['scratch'] = 1,
-                ['rollout'] = 7 
+                ['leer'] = 3,
+                ['rollout'] = 7,
+                ['shadow-claw'] = 9
             }
         },
         
