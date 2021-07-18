@@ -17,8 +17,13 @@ function Bar:setValue(value) self.value = value end
 
 function Bar:update(dt) end
 
+function Bar:tween(time, value, callback)
+    Timer.tween(time or 1, {[self] = {value = math.min(value, self.max)}})
+    :finish(function() callback() end)
+end
+
 function Bar:render()
-    local remaining = math.floor(self.value / self.max * self.width)
+    local remaining = math.floor(self.value * self.width / self.max)
     
     love.graphics.setColor(self.color.r, self.color.g, self.color.b, 1)
 

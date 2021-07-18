@@ -116,7 +116,7 @@ POKEMON_DATA =
             defenseIV = 2,
             speedIV = 3,
 
-            evolveLv = 7,
+            evolveLv = 6,
             evolveID = 'rockat',
 
             moves =
@@ -149,7 +149,7 @@ POKEMON_DATA =
             {
                 ['scratch'] = 1,
                 ['leer'] = 3,
-                ['rollout'] = 7,
+                ['rollout'] = 6,
                 ['shadow-claw'] = 9
             }
         },

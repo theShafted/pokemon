@@ -5,17 +5,24 @@ function Menu:init(parameters)
     self.selections = Selections {
         callback = parameters.callback,
         items = parameters.items,
-        x = parameters.x or 150,
-        y = parameters.y or GAME_HEIGHT - 68,
-        width = parameters.width or GAME_WIDTH - 150,
-        height = parameters.height or 17
+        x = parameters.x,
+        y = parameters.y,
+        width = parameters.width,
+        height = parameters.height,
+        orientation = parameters.orientation,
+        cursor = parameters.cursor
     }
 
     for i = 1, #parameters.items do
         local x, y = self.selections.x, self.selections.y
         local width = math.floor(self.selections.width / #parameters.items)
+        local height = math.floor(self.selections.height / #parameters.items)
 
-        table.insert(self.panels, Panel(x + (i - 1) * width, y, width - 1, self.selections.height))
+        if parameters.orientation == 'horizontal' then
+            table.insert(self.panels, Panel(x + (i - 1) * width, y, width - 1, self.selections.height))
+        else
+            table.insert(self.panels, Panel(x, y + (i - 1) * height, self.selections.width, height - 1))
+        end
     end
 end
 

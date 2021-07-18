@@ -43,7 +43,7 @@ function TurnState:enter()
     local moves = self.playerPokemon:getMoves()
 
     Stack:push(MessageState('Select a move', function()
-        Stack:push(BattleMenuState(self.battleState, moves, function()
+        Stack:push(BattleMenuState(self.battleState, {items = moves}, function()
             Stack:pop()
             Stack:pop()
 
@@ -154,87 +154,35 @@ function TurnState:faint()
                 self.playerPokemon.currentHP = self.playerPokemon.HP
                 
                 Stack:pop()
-                Stack:push(MessageState('Your pokemon has been fully restored!', function()
-                    Stack:push(FadeState(COLORS['black'], 1, 'out'))
-                end))
+
+                Stack:push(MessageState('Your pokemon has been fully restored!'))
+                Stack:push(FadeState(COLORS['black'], 1, 'out'))
             end))
         end))
     end)
 end
 
 function TurnState:victory()
-    local exp = self.playerPokemon:getExp(self.opponentPokemon)
-    local levelsGained = 0
-    
     Timer.tween(1.5, {
         [self.opponentSprite] = {opacity = 0}
     })
     :ease(Easing.outExpo)
 
     Timer.after(0.1, function()
+        local exp = self.playerPokemon:getExp(self.opponentPokemon)
+
         Stack:push(MessageState(self.opponentPokemon.name .. ' fainted!', function()
             Stack:push(MessageState('You got ' .. exp .. ' experience points!', nil, false))
-            exp = exp + self.playerPokemon.exp
+            self.playerPokemon.exp = exp + self.playerPokemon.exp
 
             local max = self.battleState.playerEXPBar.max
-            Timer.tween(1, {[self.battleState.playerEXPBar] = {value = math.min(exp, max)}})
+            Timer.tween(1, {[self.battleState.playerEXPBar] = {value = math.min(self.playerPokemon.exp, max)}})
             :finish(function()
                 Stack:pop()
 
-                if exp >= self.playerPokemon.lvlUpExp then
-                    while (exp > self.playerPokemon.lvlUpExp) do
-                        exp = exp - self.playerPokemon.lvlUpExp
-                        self.playerPokemon:levelUp()
-                        levelsGained = levelsGained + 1
-                    end
-            
-                    Stack:push(MessageState(self.playerPokemon.name .. ' grew to ' .. self.playerPokemon.level, function()
-                        local learning = false
-
-                        for name, level in pairs(self.playerPokemon.moves) do
-                            local learned = false
-                            for _, move in pairs(self.playerPokemon.learned) do
-                                if move.name == name and levelsGained > 0 then learned = true end
-                            end            
-
-                            if not learned and level > self.playerPokemon.level - levelsGained then
-                                learning = true
-                                Stack:push(LearnState(self.playerPokemon, name, function()
-                                    exp = math.min(exp, max)
-                                    
-                                    self.battleState.playerEXPBar.value = 0
-                                    Timer.tween(1, {[self.battleState.playerEXPBar] = {value = exp}})
-                                    :finish(function()
-                                        self.playerPokemon.exp = exp
-            
-                                        if self.playerPokemon.level >= self.playerPokemon.evolveLv then
-                                            self:fadeOut(self.playerPokemon)
-                                        else
-                                            self:fadeOut()
-                                        end
-                                    end)
-                                end))
-                            end
-                        end
-                        
-                        if not learning then
-                            self.battleState.playerEXPBar.value = 0
-                            Timer.tween(1, {[self.battleState.playerEXPBar] = {
-                                value = math.min(exp, self.playerPokemon.lvlUpExp)
-                            }})
-                            :finish(function()
-                                self.playerPokemon.exp = exp
-
-                                if levelsGained > 0 and self.playerPokemon.level >= self.playerPokemon.evolveLv then
-                                    self:fadeOut(self.playerPokemon)
-                                else
-                                    self:fadeOut()
-                                end
-                            end)
-                        end
-                    end))
+                if self.playerPokemon.exp >= self.playerPokemon.lvlUpExp then
+                    Stack:push(LevelUpState(self.battleState, function(evolution) self:fadeOut(evolution) end))
                 else
-                    self.playerPokemon.exp = exp
                     self:fadeOut()
                 end
             end)

@@ -39,26 +39,21 @@ function EvolveState:enter()
 
                     local message = self.pokemon.name .. ' evolved into ' .. self.evolution.name .. '!'
                     Stack:push(MessageState(message, function()
-                        local learning = false
+                        local newMove, learned = nil, false
 
                         for name, level in pairs(self.evolution.moves) do
-                            local learned = false
-                            
+                            learned = false
                             for _, move in pairs(self.pokemon.learned) do
                                 if move.name == name then learned = true end
-                                if self.pokemon.moves[move.name] > level then learned = true end
                             end
 
-                            if not learned and self.pokemon.level >= level then
-                                learning = name
-                            end
+                            if not learned and level == self.pokemon.level then newMove = name end
                         end
 
-                        if not learning then self:fadeOut()
+                        if newMove == nil then
+                            self:fadeOut()
                         else
-                            Stack:push(LearnState(self.pokemon, learning, function()
-                                self:fadeOut()
-                            end))
+                            Stack:push(LearnState(self.pokemon, newMove, function() self:fadeOut() end))
                         end
                     end))
                 end)

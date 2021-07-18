@@ -17,9 +17,9 @@ function LearnState:enter()
         Stack:push(MessageState(self.pokemon.name .. ' wants to learn ' .. self.move.name, function()
             Stack:pop()
 
-            local message = 'But, it already knows four moves, should one be deleted?'
+            local message = 'But, it already knows four moves, should a move be deleted?'
             Stack:push(MessageState(message, function()
-                Stack:push(BattleMenuState(nil, {
+                Stack:push(BattleMenuState(nil, {items = {
                     {
                         text = 'Yes',
                         selected = function()
@@ -27,13 +27,12 @@ function LearnState:enter()
                             Stack:pop()
 
                             Stack:push(MessageState('Which move should be forgotten?', function()
-                                Stack:push(BattleMenuState(nil, self.pokemon:getMoves(), function()
+                                Stack:push(BattleMenuState(nil, {items = self.pokemon:getMoves()}, function()
                                     Stack:pop()
 
                                     local index = invert(self.pokemon.learned)[self.pokemon.move]
                                     
-                                    local name = self.pokemon.move.name
-                                    message = self.pokemon.name .. ' forgot ' .. '!'
+                                    message = self.pokemon.name .. ' forgot ' .. self.pokemon.move.name .. '!'
                                     Stack:push(MessageState(message, function()
                                         Stack:pop()
 
@@ -41,9 +40,7 @@ function LearnState:enter()
                                         self.pokemon:learn(self.move)
 
                                         message ='Successfully learned ' .. self.move.name .. '!'
-                                        Stack:push(MessageState(message, function()
-                                            self.callback()
-                                        end))
+                                        Stack:push(MessageState(message, function() self.callback() end))
                                     end))
                                 end))
                             end, false))
@@ -59,7 +56,7 @@ function LearnState:enter()
                             Stack:push(MessageState(message, function() self.callback() end))
                         end
                     }
-                }))
+                }}))
             end, false))
         end))
     end

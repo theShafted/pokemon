@@ -42,7 +42,7 @@ function Pokemon:init(parameters, level, learned)
         attack = 0,
         defense = 0,
         speed = 0,
-        critical = 625/100
+        critical = 6.25/100
     }
 
     self.isCritical = false
@@ -121,10 +121,7 @@ function Pokemon:learn(move)
     for i = 1, 100 do
         for name, level in pairs(self.moves) do
             if level == i then
-                local move = MOVES_DATA[name]
-                if level <= self.level then self:learn(move) end
-                
-                break
+                if level <= self.level then self:learn(MOVES_DATA[name]) end
             end
         end
     end

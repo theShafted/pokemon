@@ -44,6 +44,7 @@ require 'src/states/game/BattleMenuState'
 require 'src/states/game/TurnState'
 require 'src/states/game/EvolveState'
 require 'src/states/game/LearnState'
+require 'src/states/game/LevelUpState'
 
 require 'src/states/entity/EntityBaseState'
 require 'src/states/entity/EntityIdleState'
