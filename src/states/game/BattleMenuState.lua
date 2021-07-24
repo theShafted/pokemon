@@ -8,6 +8,7 @@ function BattleMenuState:init(battleState, parameters, callback, cursor)
         width = GAME_WIDTH - 150,
         height = 17,
         orientation = 'horizontal',
+        font = Fonts['small']
     }
 
     self.menu = Menu {
@@ -18,6 +19,7 @@ function BattleMenuState:init(battleState, parameters, callback, cursor)
         height = self.parameters.height or 17,
         orientation = self.parameters.orientation or 'horizontal',
         cursor = cursor == nil and true or cursor,
+        font = self.parameters.font or Fonts['small'],
         items = self.parameters.items or {
             {
                 text = "ATTACK",
@@ -29,7 +31,14 @@ function BattleMenuState:init(battleState, parameters, callback, cursor)
             },
             {
                 text = "POKEMON",
-                selected = function() end
+                selected = function()
+                    Stack:pop()
+                    Stack:pop()
+
+                    Stack:push(MessageState('Choose a pokemon', function()
+                        Stack:push(ChangePokemonState(self.battleState))
+                    end, false))
+                end
             },
             {
                 text = "BAG",

@@ -149,7 +149,7 @@ function Pokemon:getDamage(move, pokemon)
             modifier = modifier / MODIFIERS[pokemon.modifiers.defense]
         end
 
-        return math.max(1, math.floor(move.power * modifier * self.attack/pokemon.defense)) + random
+        return math.max(1, math.floor(move.power * modifier * self.attack/pokemon.defense) + random)
     else
         return 0
     end

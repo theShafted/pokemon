@@ -45,6 +45,7 @@ require 'src/states/game/TurnState'
 require 'src/states/game/EvolveState'
 require 'src/states/game/LearnState'
 require 'src/states/game/LevelUpState'
+require 'src/states/game/ChangePokemonState'
 
 require 'src/states/entity/EntityBaseState'
 require 'src/states/entity/EntityIdleState'
@@ -56,7 +57,8 @@ require 'src/states/entity/PlayerWalkState'
 Fonts =
 {
     ['title'] = love.graphics.newFont('fonts/8bit.ttf', FONTS['title']),
-    ['small'] = love.graphics.newFont('fonts/8bit.ttf', FONTS['small'])
+    ['small'] = love.graphics.newFont('fonts/8bit.ttf', FONTS['small']),
+    ['tiny'] = love.graphics.newFont('fonts/8bit.ttf', FONTS['tiny'])
 }
 
 -- Imported textures

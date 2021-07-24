@@ -105,23 +105,36 @@ function BattleState:slideIn()
     end)
 end
 
-function BattleState:start()
+function BattleState:start(continue)
     local message = ''
-    if self.opponent.wild then
-        message = self.opponent.wild and 'A wild ' .. self.opponentPokemon.name .. ' appeared!'
-    else
-        message = 'You are challenged by trainer ' .. self.opponent.name .. '!'
-    end
 
-    Stack:push(MessageState(message, function()
-        Stack:push(MessageState('Go ' .. self.playerPokemon.name .. '!', function()
-            Timer.tween(0.5, {
-                [self.playerSprite] = {x = 32}
-            })
+    if continue ~= nil then
+        if continue == true then
+            message = 'Go ' .. self.playerPokemon.name .. '!'
+        else
+            message = self.playerPokemon.name .. ' is already selected!'
+        end
+
+        Stack:push(MessageState(message, function()
+            if continue == true then
+                Timer.tween(0.5, {
+                    [self.playerSprite] = {x = 32}
+                })
+            end
 
             Stack:push(MessageState('What will ' .. self.playerPokemon.name .. ' do?', function()
                 Stack:push(BattleMenuState(self))
             end, false))
         end))
-    end))
+    else
+        if self.opponent.wild then
+            message = self.opponent.wild and 'A wild ' .. self.opponentPokemon.name .. ' appeared!'
+        else
+            message = 'You are challenged by trainer ' .. self.opponent.name .. '!'
+        end
+
+        Stack:push(MessageState(message, function()
+            self:start(true)
+        end))
+    end
 end

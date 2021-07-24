@@ -3,6 +3,7 @@ FONTS =
 {
     ['title'] = 24,
     ['small'] = 6,
+    ['tiny'] = 4
 }
 
 -- Constants for game and window screen dimensions to be used by push 

@@ -48,6 +48,8 @@ function Selections:render()
         end
     end
 
+    love.graphics.setFont(Fonts['small'])
+
     if self.cursor then
         love.graphics.draw(Textures['cursor'], self.x + (self.current - 1) * self.gap, self.y - 10)
     end

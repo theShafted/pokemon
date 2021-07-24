@@ -10,7 +10,8 @@ function Menu:init(parameters)
         width = parameters.width,
         height = parameters.height,
         orientation = parameters.orientation,
-        cursor = parameters.cursor
+        cursor = parameters.cursor,
+        font = parameters.font
     }
 
     for i = 1, #parameters.items do
